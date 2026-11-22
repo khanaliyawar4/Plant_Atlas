@@ -1,0 +1,109 @@
+paths:
+  input_dir:   /path/to/PMC_filter/plant_bioengineering/TXT_files
+  output_tsv:  /path/to/PMC_filter/PMC_extraction/plant_bioeng_table.tsv
+  log_file:    /path/to/PMC_filter/PMC_extraction/extraction_run.jsonl
+
+server:
+  base_url: http://127.0.0.1:8000/v1
+  model:    qwen3-32b
+  api_key:  EMPTY
+  timeout_s: 600
+  max_retries: 4
+
+generation:
+  temperature:        0.0
+  top_p:              1.0
+  max_tokens_gate:    256
+  max_tokens_extract: 4096
+  gate_enable_thinking:    false
+  extract_enable_thinking: true
+
+extraction:
+  use_guided_json:  true
+  verify_evidence:  true
+  concurrency:      8
+
+sections:
+  body_start_patterns:
+    - '^\s*(materials?\s+and\s+methods?|methods?|experimental\s+procedures?)\s*$'
+    - '^\s*results?\s*$'
+    - '^\s*results?\s+and\s+discussion\s*$'
+    - '^\s*discussion\s*$'
+    - '^\s*conclusions?\s*$'
+  body_end_patterns:
+    - '^\s*references?\s*$'
+    - '^\s*literature\s+cited\s*$'
+    - '^\s*bibliography\s*$'
+    - '^\s*acknowledg(e?)ments?\s*$'
+    - '^\s*author\s+contributions?\s*$'
+    - '^\s*conflict\s+of\s+interest\s*$'
+    - '^\s*competing\s+interests?\s*$'
+    - '^\s*funding\s*$'
+    - '^\s*supplementary\s+(information|materials?|data)\s*$'
+    - '^\s*data\s+availability\s*$'
+  max_chars: 80000
+
+prefilter:
+  skip_article_types:
+    - review
+    - mini[- ]?review
+    - perspective
+    - opinion
+    - commentary
+    - editorial
+    - correspondence
+    - book\s+review
+    - meeting\s+report
+    - news
+    - erratum
+    - corrigendum
+    - retraction
+  require_plant_terms:
+    - plant
+    - arabidopsis
+    - oryza
+    - solanum
+    - nicotiana
+    - zea\s+mays
+    - triticum
+    - glycine\s+max
+    - medicago
+    - populus
+    - brachypodium
+    - chloroplast
+    - leaf
+    - stomata
+    - phloem
+    - xylem
+  require_engineering_terms:
+    - overexpress
+    - knock[- ]?out
+    - knock[- ]?down
+    - knockdown
+    - transgenic
+    - crispr
+    - cas9
+    - cas12
+    - guide\s+rna
+    - grna
+    - sgrna
+    - rnai
+    - amiRNA
+    - hairpin
+    - t-dna
+    - agrobacterium[- ]mediated
+    - transformation
+    - gene\s+editing
+
+output:
+  columns:
+    - plant_species
+    - genes
+    - modification_type
+    - engineering_type
+    - gene_construct
+    - phenotype
+    - mechanism
+    - doi
+    - pmcid
+  one_row_per_construct: true

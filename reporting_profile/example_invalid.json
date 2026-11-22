@@ -1,0 +1,12 @@
+{
+  "schema_version": "0.1.0",
+  "publication": {"doi": "10.1000/example"},
+  "records": [{
+    "host": {"name": "Oryza sativa", "rank": "species"},
+    "genes": [{"symbol": "GENE1", "origin_taxon": {"name": "Oryza sativa", "rank": "species"}}],
+    "intervention": "overexpression",
+    "construct": {"transcription_units": [{"parts": [{"role": "promoter", "name": "NA"}, {"role": "cds", "name": "GENE1"}]}]},
+    "outcomes": [{"trait": {"label": "grain yield"}, "direction": "up", "value": 12.5, "comparator": "wild type", "evidence": {"location": "Fig. 3"}}],
+    "evidence": {"location": "Results"}
+  }]
+}

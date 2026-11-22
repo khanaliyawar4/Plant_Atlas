@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+results/
+outputs/
+inputs/
+atlas/data/resources/
+atlas/plant_bioeng_atlas.html

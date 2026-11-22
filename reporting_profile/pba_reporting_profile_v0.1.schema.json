@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pba_reporting_profile_v0.1.schema.json",
+  "title": "PBA publication-level reporting profile (proposal, v0.1.0)",
+  "description": "Links one engineered design to its host, intervention, measured outcome, context and evidence. Proposed for community evaluation; not an adopted standard and not an SBOL replacement. Construct sequence/topology should be referenced as an SBOL3 object where available.",
+  "type": "object",
+  "required": ["schema_version", "publication", "records"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "publication": {
+      "type": "object", "required": ["doi"], "additionalProperties": false,
+      "properties": {
+        "doi": {"type": "string", "pattern": "^10\\.\\d{4,9}/\\S+$"},
+        "pmcid": {"type": "string", "pattern": "^PMC\\d+(\\.\\d+)?$"}
+      }
+    },
+    "records": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/record"}}
+  },
+  "$defs": {
+    "missing": {"enum": ["not_reported", "not_applicable", "unresolved"]},
+    "curie": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9_.-]+$"},
+    "evidence": {
+      "type": "object", "required": ["location"], "additionalProperties": false,
+      "properties": {
+        "location": {"type": "string", "description": "Section, figure, table or supplementary file in the publication, e.g. 'Methods 2.3', 'Fig. 2B', 'Table S1'."},
+        "text_span": {"type": "string", "maxLength": 1500}
+      }
+    },
+    "taxon": {
+      "type": "object", "required": ["name", "rank"], "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string", "description": "Scientific name as resolved (author label kept in author_label)."},
+        "rank": {"enum": ["species", "subspecies", "hybrid", "genus"]},
+        "ncbi_taxon": {"type": "string", "pattern": "^NCBITaxon:\\d+$"},
+        "cultivar_or_line": {"type": "string"},
+        "author_label": {"type": "string"}
+      }
+    },
+    "gene": {
+      "type": "object", "required": ["symbol", "origin_taxon", "identifier"], "additionalProperties": false,
+      "properties": {
+        "symbol": {"type": "string"},
+        "origin_taxon": {"$ref": "#/$defs/taxon"},
+        "identifier": {"oneOf": [{"$ref": "#/$defs/curie"}, {"$ref": "#/$defs/missing"}], "description": "Stable gene/locus identifier qualified by the organism of origin, e.g. TAIR:AT5G05410, or an explicit missing value."},
+        "author_label": {"type": "string"}
+      }
+    },
+    "part": {
+      "type": "object", "required": ["role", "name"], "additionalProperties": false,
+      "properties": {
+        "role": {"enum": ["promoter", "5UTR", "cds", "gRNA", "tag", "linker", "terminator", "marker", "other"]},
+        "name": {"oneOf": [{"type": "string", "minLength": 1, "not": {"enum": ["NA", "na", ""]}}, {"$ref": "#/$defs/missing"}]},
+        "identifier": {"type": "string", "description": "Registry/GenBank accession or SBOL3 URI of the part, if available."}
+      }
+    },
+    "transcription_unit": {
+      "type": "object", "required": ["parts"], "additionalProperties": false,
+      "properties": {"parts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/part"}, "description": "Ordered 5'->3'."}}
+    },
+    "outcome": {
+      "type": "object", "required": ["trait", "direction", "comparator", "evidence"], "additionalProperties": false,
+      "properties": {
+        "trait": {"type": "object", "required": ["label"], "additionalProperties": false,
+                  "properties": {"label": {"type": "string"}, "to_term": {"type": "string", "pattern": "^TO:\\d{7}$"}, "po_term": {"type": "string", "pattern": "^PO:\\d{7}$"}}},
+        "direction": {"enum": ["increase", "decrease", "no_change", "mixed"]},
+        "value": {"type": "number"},
+        "unit": {"type": "string"},
+        "comparator": {"type": "string", "description": "e.g. 'wild type Col-0', 'empty-vector control'."},
+        "conditions": {"type": "string"},
+        "evidence": {"$ref": "#/$defs/evidence"}
+      },
+      "dependentRequired": {"value": ["unit"]}
+    },
+    "record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["host", "genes", "intervention", "construct", "outcomes", "evidence"],
+      "properties": {
+        "host": {"$ref": "#/$defs/taxon"},
+        "genes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/gene"}},
+        "intervention": {"enum": ["overexpression", "heterologous_expression", "complementation", "rnai_silencing", "knockout_knockdown", "genome_editing", "base_editing", "prime_editing", "mutant_allele", "reporter_or_promoter_analysis", "other"]},
+        "construct": {
+          "type": "object", "required": ["transcription_units"], "additionalProperties": false,
+          "properties": {
+            "grammar_string": {"type": "string", "description": "Compact PBA grammar (Supplementary Note 3), derived from transcription_units."},
+            "transcription_units": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/transcription_unit"}},
+            "vector": {"type": "string"},
+            "sbol3_uri": {"type": "string", "format": "uri"}
+          }
+        },
+        "outcomes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/outcome"}},
+        "mechanism": {"type": "string"},
+        "evidence": {"$ref": "#/$defs/evidence"}
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+openai>=1.30
+tenacity>=8.2
+orjson>=3.10
+pyyaml>=6
+tqdm>=4.66
+regex>=2024.5

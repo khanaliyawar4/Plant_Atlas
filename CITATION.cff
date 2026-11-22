@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this software or data, please cite it as below."
+title: "Plant Bioengineering Atlas: code and data release"
+version: "1.1.0"
+license: MIT
+type: software
+authors:
+  - family-names: Yawar
+    given-names: Khan A.
+    affiliation: Oak Ridge National Laboratory
+  - family-names: Martin
+    given-names: Stanton
+    affiliation: Oak Ridge National Laboratory
+  - family-names: Weston
+    given-names: David J.
+    affiliation: Oak Ridge National Laboratory
+  - family-names: Gu
+    given-names: Lianhong
+    affiliation: Oak Ridge National Laboratory
+  - family-names: Tuskan
+    given-names: Gerald A.
+    affiliation: Oak Ridge National Laboratory
+  - family-names: Yang
+    given-names: Xiaohan
+    affiliation: Oak Ridge National Laboratory
+keywords:
+  - plant genetic engineering
+  - knowledge graph
+  - DNA construct
+  - plant traits
+  - text mining

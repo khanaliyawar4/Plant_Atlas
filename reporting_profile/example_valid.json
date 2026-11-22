@@ -1,0 +1,22 @@
+{
+  "schema_version": "0.1.0",
+  "publication": {"doi": "10.1007/s11103-015-0415-2", "pmcid": "PMC4740368"},
+  "records": [{
+    "host": {"name": "Arabidopsis thaliana", "rank": "species", "ncbi_taxon": "NCBITaxon:3702", "cultivar_or_line": "Col-0"},
+    "genes": [{"symbol": "MYB37", "origin_taxon": {"name": "Arabidopsis thaliana", "rank": "species", "ncbi_taxon": "NCBITaxon:3702"}, "identifier": "TAIR:AT5G23000"}],
+    "intervention": "overexpression",
+    "construct": {
+      "grammar_string": "CaMV35S-MYB37::GFP-NosT",
+      "transcription_units": [{"parts": [
+        {"role": "promoter", "name": "CaMV 35S"},
+        {"role": "cds", "name": "MYB37"},
+        {"role": "tag", "name": "GFP"},
+        {"role": "terminator", "name": "NOS terminator"}]}]
+    },
+    "outcomes": [
+      {"trait": {"label": "drought tolerance", "to_term": "TO:0000276"}, "direction": "increase", "comparator": "wild type Col-0", "evidence": {"location": "Results"}},
+      {"trait": {"label": "flowering time"}, "direction": "increase", "comparator": "wild type Col-0", "evidence": {"location": "Results"}}
+    ],
+    "evidence": {"location": "Methods; Results"}
+  }]
+}
